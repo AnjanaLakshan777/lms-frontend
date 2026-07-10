@@ -18,7 +18,7 @@ export const Content = () => {
               <th style={{ width: "40%" }}>Title</th>
               <th style={{ width: "10%" }}>Content Type</th>
               <th style={{ width: "10%" }}>Content</th>
-              <th style={{ width: "10%" }}>Lesson ID</th>
+              <th style={{ width: "10%" }}>Lesson Code</th>
               <th style={{ width: "15%" }}>Actions</th>
             </tr>
           </thead>

@@ -1,47 +1,99 @@
-import { Container } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Alert, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import { getCourses } from "../../api/courseAPI";
+import type { Course as CourseType } from "../../types/course";
 
 export const Course = () => {
-  return (
-    <>
-      <Container fluid className="mt-4 px-4">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="mb-0 fst-italic">All Courses</h2>
-          <Button variant="primary">Add New Course</Button>
-        </div>
+  const [courses, setCourses] = useState<CourseType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-        <Table striped bordered hover>
+  const loadCourses = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await getCourses();
+      setCourses(response.data);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load courses.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCourses();
+  }, []);
+
+  return (
+    <Container fluid className="mt-4 px-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0 fst-italic">All Courses</h2>
+
+        <Button variant="primary">Add New Course</Button>
+      </div>
+
+      {loading && (
+        <div className="text-center my-5">
+          <Spinner animation="border" />
+        </div>
+      )}
+
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      {!loading && !error && (
+        <Table striped bordered hover responsive>
           <thead>
             <tr>
               <th style={{ width: "10%" }}>Course Code</th>
-              <th style={{ width: "24%" }}>Course Name</th>
+              <th style={{ width: "25%" }}>Course Name</th>
               <th style={{ width: "40%" }}>Description</th>
               <th style={{ width: "10%" }}>Instructor ID</th>
-              <th style={{ width: "15%" }}>Actions</th>
+              <th style={{ width: "15%" }}>
+                Actions
+              </th>
             </tr>
           </thead>
+
           <tbody>
-            <tr>
-              <td>CS001</td>
-              <td>Introduction to Python</td>
-              <td>Learn the basics of Python programming.</td>
-              <td>INS001</td>
-              <td className="d-flex justify-content-center">
-                <Button variant="outline-primary" className="me-2">
-                  <PencilSquare className="me-2" />
-                  Edit
-                </Button>
-                <Button variant="outline-danger">
-                  <Trash className="me-2" />
-                  Delete
-                </Button>
-              </td>
-            </tr>
+            {courses.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center">
+                  No courses found.
+                </td>
+              </tr>
+            ) : (
+              courses.map((course) => (
+                <tr key={course.courseId}>
+                  <td>{course.courseCode}</td>
+                  <td>{course.courseName}</td>
+                  <td>{course.description}</td>
+                  <td>{course.instructorId}</td>
+
+                  <td>
+                    <div className="d-flex justify-content-center gap-2">
+                      <Button size="sm" variant="outline-primary">
+                        <PencilSquare className="me-1" />
+                        Edit
+                      </Button>
+
+                      <Button size="sm" variant="outline-danger">
+                        <Trash className="me-1" />
+                        Delete
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </Table>
-      </Container>
-    </>
+      )}
+    </Container>
   );
 };

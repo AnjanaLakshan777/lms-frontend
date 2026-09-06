@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { NavBar } from "./components/NavBar";
+import { NavBar } from "./components/Navbar/NavBar";
 import { Student } from "./components/Student";
 import { Instructor } from "./components/Instructor";
 import { Course } from "./components/course/Course";

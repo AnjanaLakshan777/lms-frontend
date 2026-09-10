@@ -3,33 +3,29 @@ import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
-export const Student = () => {
+export const Lesson = () => {
   return (
     <>
       <Container fluid className="mt-4 px-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="mb-0 fst-italic">All Students</h2>
-          <Button variant="primary">Add New Student</Button>
+          <h2 className="mb-0">All Lessons</h2>
+          <Button variant="primary">Add New Lesson</Button>
         </div>
 
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th style={{ width: "9%" }}>Student ID</th>
-              <th style={{ width: "15%" }}>Student Name</th>
-              <th style={{ width: "20%" }}>Email</th>
-              <th style={{ width: "10%" }}>Phone</th>
-              <th style={{ width: "30%" }}>Address</th>
+              <th style={{ width: "10%" }}>Lesson Code</th>
+              <th style={{ width: "60%" }}>Lesson Name</th>
+              <th style={{ width: "10%" }}>Module Code</th>
               <th style={{ width: "15%" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>STD001</td>
-              <td>Anjana Lakshan</td>
-              <td>anjana@gmail.com</td>
-              <td>0711111111</td>
-              <td>123 Main St, Colombo</td>
+              <td>LES001</td>
+              <td>Variables and Types</td>
+              <td>MD001</td>
               <td className="d-flex justify-content-center">
                 <Button variant="outline-primary" className="me-2">
                   <PencilSquare className="me-2" />

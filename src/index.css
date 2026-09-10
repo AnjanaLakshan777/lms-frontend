@@ -1,0 +1,66 @@
+.custom-nav-link {
+  color: rgb(170, 170, 170) !important;
+  transition: color 0.2s ease;
+}
+
+.custom-nav-link:hover {
+  color: #ffffff !important ;
+}
+
+.custom-nav-link.active {
+  color: #ffffff !important ;
+}
+
+.signin-page{
+  min-height: 91vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f6f8;
+}
+
+.signin-card{
+  width: 100%;
+  max-width: 420px;
+  min-height: 400px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.signup-page {
+  height: calc(100dvh - 56px);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: #f5f6f8;
+}
+
+.signup-card {
+  width: 100%;
+  max-width: 420px;
+  flex: 0 0 auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.auth-links {
+  background-color: #0d6efd;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+}
+
+.auth-links .nav-link {
+  background-color: #0d6efd;
+  color: white !important;
+  border-radius: 5px;
+  margin-left: 0.25rem;
+  padding: 0.3rem 0.75rem;
+  font-weight: 500;
+}
+
+.auth-links .nav-link:hover,
+.auth-links .nav-link.active {
+  background-color: #084298;
+  color: white !important;
+}

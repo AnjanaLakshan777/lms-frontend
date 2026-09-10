@@ -1,11 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { NavBar } from "./components/Navbar/NavBar";
-import { Student } from "./components/Student";
-import { Instructor } from "./components/Instructor";
+import {Home} from "./components/Home";
+import {SignIn} from "./components/auth/SignIn";
+import {SignUp} from "./components/auth/SignUp";
+import { Student } from "./components/student/Student";
+import { Instructor } from "./components/instructor/Instructor";
 import { Course } from "./components/course/Course";
-import { Module } from "./components/Module";
-import { Lesson } from "./components/Lesson";
-import { Content } from "./components/Content";
+import { Module } from "./components/module/Module";
+import { Lesson } from "./components/lesson/Lesson";
+import { Content } from "./components/content/Content";
 
 function App() {
   return (
@@ -13,7 +16,9 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/students" element={<Student />} />
           <Route path="/instructors" element={<Instructor />} />
           <Route path="/courses" element={<Course />} />

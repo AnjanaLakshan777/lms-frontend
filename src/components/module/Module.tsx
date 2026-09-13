@@ -29,6 +29,11 @@ export const Module = () => {
     loadModules();
   }, []);
 
+  const reloadModules = async () => {
+    const response = await getModules();
+    setModules(response.data);
+  };
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -97,6 +102,7 @@ export const Module = () => {
       <AddModule
         show={showAddModuleForm}
         onHide={() => setShowAddModuleForm(false)}
+        onSaved={reloadModules}
       />
     </Container>
   );

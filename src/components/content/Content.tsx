@@ -28,6 +28,11 @@ export const Content = () => {
     loadContents();
   }, []);
 
+  const reloadContents = async () => {
+    const response = await getContents();
+    setContents(response.data);
+  };
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -110,15 +115,18 @@ export const Content = () => {
                         hour12: false,
                       })}
                     </td>
-                    <td className="d-flex justify-content-center">
-                      <Button variant="outline-primary" className="me-2">
-                        <PencilSquare className="me-2" />
-                        Edit
-                      </Button>
-                      <Button variant="outline-danger">
-                        <Trash className="me-2" />
-                        Delete
-                      </Button>
+                    <td>
+                      <div className="d-flex justify-content-center gap-2">
+                        <Button variant="outline-primary">
+                          <PencilSquare className="me-2" />
+                          Edit
+                        </Button>
+
+                        <Button variant="outline-danger">
+                          <Trash className="me-2" />
+                          Delete
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -130,6 +138,7 @@ export const Content = () => {
       <AddContent
         show={showAddContentForm}
         onHide={() => setShowAddContentForm(false)}
+        onSaved={reloadContents}
       />
     </Container>
   );

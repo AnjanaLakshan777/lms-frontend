@@ -30,11 +30,19 @@ export const Instructor = () => {
     loadInstructors();
   }, []);
 
+  const reloadInstructors = async () => {
+    const response = await getInstructors();
+    setInstructors(response.data);
+  };
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">All Instructors</h2>
-        <Button variant="primary" onClick={() => setShowAddInstructorForm(true)}>
+        <Button
+          variant="primary"
+          onClick={() => setShowAddInstructorForm(true)}
+        >
           Add New Instructor
         </Button>
       </div>
@@ -96,6 +104,7 @@ export const Instructor = () => {
       <AddInstructor
         show={showAddInstructorForm}
         onHide={() => setShowAddInstructorForm(false)}
+        onSaved={reloadInstructors}
       />
     </Container>
   );

@@ -30,6 +30,11 @@ export const Student = () => {
     loadStudents();
   }, []);
 
+  const reloadStudents = async () => {
+    const response = await getStudents();
+    setStudents(response.data);
+  };
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -96,6 +101,7 @@ export const Student = () => {
       <AddStudent
         show={showAddStudentForm}
         onHide={() => setShowAddStudentForm(false)}
+        onSaved={reloadStudents}
       />
     </Container>
   );

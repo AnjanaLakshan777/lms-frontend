@@ -6,16 +6,22 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { getLessons } from "../../services/lessonService";
 import type { Lesson as LessonType } from "../../types/lesson";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
+import { saveContent } from "../../services/contentService";
 
 type AddContentProps = {
   show: boolean;
   onHide: () => void;
+  onSaved: () => void;
 };
 
-function AddContent({ show, onHide }: AddContentProps) {
+function AddContent({ show, onHide, onSaved }: AddContentProps) {
   const [validated, setValidated] = useState(false);
   const [lessons, setLessons] = useState<LessonType[]>([]);
   const [selectedLessonId, setSelectedLessonId] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadLessons = async () => {
@@ -32,7 +38,7 @@ function AddContent({ show, onHide }: AddContentProps) {
     }
   }, [show]);
 
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -40,7 +46,34 @@ function AddContent({ show, onHide }: AddContentProps) {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      onHide();
+      const formData = new FormData(form);
+      const fileData = formData.get("fileData");
+
+      if (!(fileData instanceof File) || fileData.size === 0) {
+        setError("Please select a file.");
+        setValidated(true);
+        return;
+      }
+
+      setSaving(true);
+      setError("");
+
+      try {
+        await saveContent({
+          contentCode: String(formData.get("contentCode")),
+          title: String(formData.get("title")),
+          type: String(formData.get("type")),
+          lessonId: Number(formData.get("lessonId")),
+          fileData,
+        });
+        onSaved();
+        onHide();
+      } catch (err) {
+        console.error(err);
+        setError("Unable to save content.");
+      } finally {
+        setSaving(false);
+      }
     }
 
     setValidated(true);
@@ -54,10 +87,12 @@ function AddContent({ show, onHide }: AddContentProps) {
 
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Modal.Body>
+          {error && <Alert variant="danger">{error}</Alert>}
           <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom01">
               <Form.Label>Content Code</Form.Label>
               <Form.Control
+                name="contentCode"
                 required
                 type="text"
                 placeholder="CNT001"
@@ -74,6 +109,7 @@ function AddContent({ show, onHide }: AddContentProps) {
             <Form.Group as={Col} md="12" controlId="validationCustom02">
               <Form.Label>Content Title</Form.Label>
               <Form.Control
+                name="title"
                 type="text"
                 placeholder="Class and Object image"
                 required
@@ -87,20 +123,26 @@ function AddContent({ show, onHide }: AddContentProps) {
           <Row className="mb-3">
             <Form.Group as={Col} md="4" controlId="validationCustom03">
               <Form.Label>Type</Form.Label>
-              <Form.Control type="text" placeholder="JPG" />
+              <Form.Control
+                name="type"
+                type="text"
+                placeholder="JPG"
+                required
+              />
               <Form.Control.Feedback type="invalid">
                 Please provide a content type.
               </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group as={Col} md="8" controlId="validationCustom04">
+            </Form.Group>
+            <Form.Group as={Col} md="8" controlId="validationCustom04">
               <Form.Label>File</Form.Label>
-              <Form.Control type="file" />
-              </Form.Group>
+              <Form.Control name="fileData" type="file" required />
+            </Form.Group>
           </Row>
           <Row className="mb-3">
             <Form.Group as={Col} md="12" controlId="validationCustom04">
               <Form.Label>Lesson</Form.Label>
               <Form.Select
+                name="lessonId"
                 value={selectedLessonId}
                 onChange={(e) => setSelectedLessonId(e.target.value)}
                 required
@@ -122,7 +164,16 @@ function AddContent({ show, onHide }: AddContentProps) {
           <Button variant="danger" onClick={onHide}>
             Cancel
           </Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={saving}>
+            {saving ? (
+              <>
+                <Spinner size="sm" className="me-2" />
+                Saving...
+              </>
+            ) : (
+              "Submit"
+            )}
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>

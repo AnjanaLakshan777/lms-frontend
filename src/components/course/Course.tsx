@@ -29,6 +29,11 @@ export const Course = () => {
     loadCourses();
   }, []);
 
+  const reloadCourses = async () => {
+    const response = await getCourses();
+    setCourses(response.data);
+  };
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -97,6 +102,7 @@ export const Course = () => {
       <AddCourse
         show={showAddCourseForm}
         onHide={() => setShowAddCourseForm(false)}
+        onSaved={reloadCourses}
       />
     </Container>
   );

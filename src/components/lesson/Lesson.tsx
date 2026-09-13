@@ -29,6 +29,11 @@ export const Lesson = () => {
     loadLessons();
   }, []);
 
+  const reloadLessons = async () => {
+    const response = await getLessons();
+    setLessons(response.data);
+  };
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -95,6 +100,7 @@ export const Lesson = () => {
       <AddLesson
         show={showAddLessonForm}
         onHide={() => setShowAddLessonForm(false)}
+        onSaved={reloadLessons}
       />
     </Container>
   );

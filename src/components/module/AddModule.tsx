@@ -78,7 +78,7 @@ function AddModule({ show, onHide, onSaved }: AddModuleProps) {
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom01">
+            <Form.Group as={Col} md="6">
               <Form.Label>Module Code</Form.Label>
               <Form.Control
                 name="moduleCode"
@@ -94,7 +94,7 @@ function AddModule({ show, onHide, onSaved }: AddModuleProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom02">
+            <Form.Group as={Col} md="12">
               <Form.Label>Module Name</Form.Label>
               <Form.Control
                 name="moduleName"
@@ -108,7 +108,7 @@ function AddModule({ show, onHide, onSaved }: AddModuleProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
+            <Form.Group as={Col} md="12">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 name="description"
@@ -123,7 +123,7 @@ function AddModule({ show, onHide, onSaved }: AddModuleProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom04">
+            <Form.Group as={Col} md="12">
               <Form.Label>Course</Form.Label>
               <Form.Select
                 name="courseId"

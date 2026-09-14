@@ -7,12 +7,15 @@ import { useEffect } from "react";
 import { getStudents } from "../../services/studentService";
 import type { User as UserType } from "../../types/user";
 import AddStudent from "./AddStudent";
+import UpdateStudent from "./UpdateStudent";
 
 export const Student = () => {
   const [students, setStudents] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+  const [showUpdateStudentForm, setShowUpdateStudentForm] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<UserType | null>(null);
 
   useEffect(() => {
     const loadStudents = async () => {
@@ -33,6 +36,16 @@ export const Student = () => {
   const reloadStudents = async () => {
     const response = await getStudents();
     setStudents(response.data);
+  };
+
+  const handleEditStudent = (student: UserType) => {
+    setSelectedStudent(student);
+    setShowUpdateStudentForm(true);
+  };
+
+  const handleCloseUpdateStudent = () => {
+    setShowUpdateStudentForm(false);
+    setSelectedStudent(null);
   };
 
   return (
@@ -81,7 +94,11 @@ export const Student = () => {
                   <td>{`${student.addressLine1}, ${student.addressLine2}, ${student.addressLine3}, ${student.city}`}</td>
                   <td>
                     <div className="d-flex justify-content-center gap-2">
-                      <Button size="sm" variant="outline-primary">
+                      <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => handleEditStudent(student)}
+                      >
                         <PencilSquare className="me-1" />
                         Edit
                       </Button>
@@ -103,6 +120,14 @@ export const Student = () => {
         onHide={() => setShowAddStudentForm(false)}
         onSaved={reloadStudents}
       />
+      {selectedStudent && (
+        <UpdateStudent
+          student={selectedStudent}
+          show={showUpdateStudentForm}
+          onHide={handleCloseUpdateStudent}
+          onUpdated={reloadStudents}
+        />
+      )}
     </Container>
   );
 };

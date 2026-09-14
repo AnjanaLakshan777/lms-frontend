@@ -68,7 +68,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom01">
+            <Form.Group as={Col} md="6">
               <Form.Label>First name</Form.Label>
               <Form.Control
                 name="firstName"
@@ -78,7 +78,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom02">
+            <Form.Group as={Col} md="6">
               <Form.Label>Last name</Form.Label>
               <Form.Control
                 name="lastName"
@@ -90,7 +90,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom03">
+            <Form.Group as={Col} md="6">
               <Form.Label>Address Line 1</Form.Label>
               <Form.Control
                 name="addressLine1"
@@ -102,7 +102,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
                 Please provide a valid address.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom04">
+            <Form.Group as={Col} md="6">
               <Form.Label>Address Line 2</Form.Label>
               <Form.Control
                 name="addressLine2"
@@ -116,7 +116,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom05">
+            <Form.Group as={Col} md="6">
               <Form.Label>Address Line 3</Form.Label>
               <Form.Control
                 name="addressLine3"
@@ -127,7 +127,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
                 Please provide a valid address.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom06">
+            <Form.Group as={Col} md="6">
               <Form.Label>City</Form.Label>
               <Form.Control
                 name="city"
@@ -141,7 +141,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom07">
+            <Form.Group as={Col} md="6">
               <Form.Label>E-mail</Form.Label>
               <Form.Control
                 name="email"
@@ -153,7 +153,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
                 Please provide a valid e-mail address.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom08">
+            <Form.Group as={Col} md="6">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 name="phoneNumber"
@@ -167,7 +167,7 @@ function AddStudent({ show, onHide, onSaved }: AddStudentProps) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" controlId="validationCustom09">
+            <Form.Group as={Col} md="6">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 name="password"

@@ -79,7 +79,7 @@ function AddLesson({ show, onHide, onSaved }: AddLessonProps) {
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom01">
+            <Form.Group as={Col} md="12">
               <Form.Label>Lesson Code</Form.Label>
               <Form.Control
                 name="lessonCode"
@@ -96,7 +96,7 @@ function AddLesson({ show, onHide, onSaved }: AddLessonProps) {
           </Row>
 
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom02">
+            <Form.Group as={Col} md="12">
               <Form.Label>Lesson Name</Form.Label>
               <Form.Control
                 name="lessonName"
@@ -111,7 +111,7 @@ function AddLesson({ show, onHide, onSaved }: AddLessonProps) {
           </Row>
 
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
+            <Form.Group as={Col} md="12">
               <Form.Label>Module</Form.Label>
               <Form.Select
                 name="moduleId"

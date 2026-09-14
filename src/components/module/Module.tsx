@@ -6,12 +6,15 @@ import Table from "react-bootstrap/Table";
 import { getModules } from "../../services/moduleService";
 import type { Module as ModuleType } from "../../types/module";
 import AddModule from "./AddModule";
+import UpdateModule from "./UpdateModule";
 
 export const Module = () => {
   const [modules, setModules] = useState<ModuleType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
+  const [showUpdateModuleForm, setShowUpdateModuleForm] = useState(false);
+  const [selectedModule, setSelectedModule] = useState<ModuleType | null>(null);
 
   useEffect(() => {
     const loadModules = async () => {
@@ -32,6 +35,16 @@ export const Module = () => {
   const reloadModules = async () => {
     const response = await getModules();
     setModules(response.data);
+  };
+
+  const handleEditModule = (module: ModuleType) => {
+    setSelectedModule(module);
+    setShowUpdateModuleForm(true);
+  };
+
+  const closeUpdateModule = () => {
+    setShowUpdateModuleForm(false);
+    setSelectedModule(null);
   };
 
   return (
@@ -81,7 +94,11 @@ export const Module = () => {
 
                   <td>
                     <div className="d-flex justify-content-center gap-2">
-                      <Button size="sm" variant="outline-primary">
+                      <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => handleEditModule(module)}
+                      >
                         <PencilSquare className="me-1" />
                         Edit
                       </Button>
@@ -104,6 +121,14 @@ export const Module = () => {
         onHide={() => setShowAddModuleForm(false)}
         onSaved={reloadModules}
       />
+      {selectedModule && (
+        <UpdateModule
+          module={selectedModule}
+          show={showUpdateModuleForm}
+          onHide={closeUpdateModule}
+          onUpdated={reloadModules}
+        />
+      )}
     </Container>
   );
 };

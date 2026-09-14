@@ -12,3 +12,13 @@ export const saveLesson = async (lesson: CreateLessonRequest) => {
 
     return response.data;
 };
+
+export const updateLesson = async (lesson: Lesson) => {
+    const response = await axios.put(`/lessons/${lesson.lessonId}`, {
+        lessonCode: lesson.lessonCode,
+        lessonName: lesson.lessonName,
+        moduleId: lesson.moduleId,
+    });
+
+    return response.data;
+};

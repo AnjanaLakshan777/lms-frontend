@@ -12,3 +12,9 @@ export const saveCourse = async (course: CreateCourseRequest) => {
 
   return response.data;
 };
+
+export const updateCourse = async (course: Course) => {
+  const response = await axios.put(`/courses/${course.courseId}`, course);
+
+  return response.data;
+};

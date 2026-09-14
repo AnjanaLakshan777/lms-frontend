@@ -89,7 +89,7 @@ function AddContent({ show, onHide, onSaved }: AddContentProps) {
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom01">
+            <Form.Group as={Col} md="12">
               <Form.Label>Content Code</Form.Label>
               <Form.Control
                 name="contentCode"
@@ -106,7 +106,7 @@ function AddContent({ show, onHide, onSaved }: AddContentProps) {
           </Row>
 
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom02">
+            <Form.Group as={Col} md="12">
               <Form.Label>Content Title</Form.Label>
               <Form.Control
                 name="title"
@@ -121,7 +121,7 @@ function AddContent({ show, onHide, onSaved }: AddContentProps) {
           </Row>
 
           <Row className="mb-3">
-            <Form.Group as={Col} md="4" controlId="validationCustom03">
+            <Form.Group as={Col} md="4">
               <Form.Label>Type</Form.Label>
               <Form.Control
                 name="type"
@@ -133,13 +133,13 @@ function AddContent({ show, onHide, onSaved }: AddContentProps) {
                 Please provide a content type.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} md="8" controlId="validationCustom04">
+            <Form.Group as={Col} md="8">
               <Form.Label>File</Form.Label>
               <Form.Control name="fileData" type="file" required />
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom04">
+            <Form.Group as={Col} md="12">
               <Form.Label>Lesson</Form.Label>
               <Form.Select
                 name="lessonId"

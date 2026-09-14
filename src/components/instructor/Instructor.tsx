@@ -7,12 +7,18 @@ import { useEffect } from "react";
 import { getInstructors } from "../../services/instructorService";
 import type { User as UserType } from "../../types/user";
 import AddInstructor from "./AddInstructor";
+import UpdateInstructor from "./UpdateInstructor";
 
 export const Instructor = () => {
   const [instructors, setInstructors] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddInstructorForm, setShowAddInstructorForm] = useState(false);
+  const [showUpdateInstructorForm, setShowUpdateInstructorForm] =
+    useState(false);
+  const [selectedInstructor, setSelectedInstructor] = useState<UserType | null>(
+    null,
+  );
 
   useEffect(() => {
     const loadInstructors = async () => {
@@ -33,6 +39,16 @@ export const Instructor = () => {
   const reloadInstructors = async () => {
     const response = await getInstructors();
     setInstructors(response.data);
+  };
+
+  const handleEditInstructor = (instructor: UserType) => {
+    setSelectedInstructor(instructor);
+    setShowUpdateInstructorForm(true);
+  };
+
+  const closeUpdateInstructor = () => {
+    setShowUpdateInstructorForm(false);
+    setSelectedInstructor(null);
   };
 
   return (
@@ -84,7 +100,11 @@ export const Instructor = () => {
                   <td>{`${instructor.addressLine1}, ${instructor.addressLine2}, ${instructor.addressLine3}, ${instructor.city}`}</td>
                   <td>
                     <div className="d-flex justify-content-center gap-2">
-                      <Button size="sm" variant="outline-primary">
+                      <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => handleEditInstructor(instructor)}
+                      >
                         <PencilSquare className="me-1" />
                         Edit
                       </Button>
@@ -106,6 +126,14 @@ export const Instructor = () => {
         onHide={() => setShowAddInstructorForm(false)}
         onSaved={reloadInstructors}
       />
+      {selectedInstructor && (
+        <UpdateInstructor
+          instructor={selectedInstructor}
+          show={showUpdateInstructorForm}
+          onHide={closeUpdateInstructor}
+          onUpdated={reloadInstructors}
+        />
+      )}
     </Container>
   );
 };

@@ -6,12 +6,17 @@ import Table from "react-bootstrap/Table";
 import { getContents } from "../../services/contentService";
 import type { Content as ContentType } from "../../types/content";
 import AddContent from "./AddContent";
+import UpdateContent from "./UpdateContent";
 
 export const Content = () => {
   const [contents, setContents] = useState<ContentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddContentForm, setShowAddContentForm] = useState(false);
+  const [showUpdateContentForm, setShowUpdateContentForm] = useState(false);
+  const [selectedContent, setSelectedContent] = useState<ContentType | null>(
+    null,
+  );
 
   useEffect(() => {
     const loadContents = async () => {
@@ -31,6 +36,16 @@ export const Content = () => {
   const reloadContents = async () => {
     const response = await getContents();
     setContents(response.data);
+  };
+
+  const handleEditContent = (content: ContentType) => {
+    setSelectedContent(content);
+    setShowUpdateContentForm(true);
+  };
+
+  const closeUpdateContent = () => {
+    setShowUpdateContentForm(false);
+    setSelectedContent(null);
   };
 
   return (
@@ -117,7 +132,10 @@ export const Content = () => {
                     </td>
                     <td>
                       <div className="d-flex justify-content-center gap-2">
-                        <Button variant="outline-primary">
+                        <Button
+                          variant="outline-primary"
+                          onClick={() => handleEditContent(content)}
+                        >
                           <PencilSquare className="me-2" />
                           Edit
                         </Button>
@@ -140,6 +158,14 @@ export const Content = () => {
         onHide={() => setShowAddContentForm(false)}
         onSaved={reloadContents}
       />
+      {selectedContent && (
+        <UpdateContent
+          content={selectedContent}
+          show={showUpdateContentForm}
+          onHide={closeUpdateContent}
+          onUpdated={reloadContents}
+        />
+      )}
     </Container>
   );
 };

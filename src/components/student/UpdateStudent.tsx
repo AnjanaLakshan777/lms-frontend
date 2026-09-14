@@ -1,20 +1,27 @@
 import React, { useState } from "react";
+import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
-import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
-import { saveInstructor } from "../../services/instructorService";
+import { updateStudent } from "../../services/studentService";
+import type { User } from "../../types/user";
 
-type AddInstructorProps = {
+type UpdateStudentProps = {
+  student: User;
   show: boolean;
   onHide: () => void;
-  onSaved: () => void;
+  onUpdated: () => void;
 };
 
-function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
+function UpdateStudent({
+  student,
+  show,
+  onHide,
+  onUpdated,
+}: UpdateStudentProps) {
   const [validated, setValidated] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -23,45 +30,46 @@ function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
     event.preventDefault();
 
     const form = event.currentTarget;
-
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-    } else {
-      setSaving(true);
-      setError("");
-
-      const formData = new FormData(form);
-
-      try {
-        await saveInstructor({
-          firstName: String(formData.get("firstName")),
-          lastName: String(formData.get("lastName")),
-          addressLine1: String(formData.get("addressLine1")),
-          addressLine2: String(formData.get("addressLine2")),
-          addressLine3: String(formData.get("addressLine3")),
-          city: String(formData.get("city")),
-          email: String(formData.get("email")),
-          phoneNumber: String(formData.get("phoneNumber")),
-          password: String(formData.get("password")),
-          role: "INSTRUCTOR",
-        });
-
-        onSaved();
-        onHide();
-      } catch (err) {
-        console.error(err);
-        setError("Unable to save instructor.");
-      } finally {
-        setSaving(false);
-      }
-    }
     setValidated(true);
+
+    if (!form.checkValidity()) {
+      event.stopPropagation();
+      return;
+    }
+
+    setSaving(true);
+    setError("");
+
+    const formData = new FormData(form);
+
+    try {
+      await updateStudent({
+        ...student,
+        firstName: String(formData.get("firstName")),
+        lastName: String(formData.get("lastName")),
+        addressLine1: String(formData.get("addressLine1")),
+        addressLine2: String(formData.get("addressLine2")),
+        addressLine3: String(formData.get("addressLine3")),
+        city: String(formData.get("city")),
+        email: String(formData.get("email")),
+        phoneNumber: String(formData.get("phoneNumber")),
+        password: String(formData.get("password")),
+      });
+
+      onUpdated();
+      onHide();
+    } catch (err) {
+      console.error(err);
+      setError("Unable to update student.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add New Instructor</Modal.Title>
+        <Modal.Title>Update Student</Modal.Title>
       </Modal.Header>
 
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -73,99 +81,72 @@ function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
               <Form.Control
                 name="firstName"
                 required
-                type="text"
-                placeholder="Amal"
+                defaultValue={student.firstName}
               />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="6">
               <Form.Label>Last name</Form.Label>
               <Form.Control
                 name="lastName"
                 required
-                type="text"
-                placeholder="Perera"
+                defaultValue={student.lastName}
               />
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
+
           <Row className="mb-3">
             <Form.Group as={Col} md="6">
               <Form.Label>Address Line 1</Form.Label>
               <Form.Control
                 name="addressLine1"
-                type="text"
-                placeholder="No.23"
                 required
+                defaultValue={student.addressLine1}
               />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
-              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="6">
               <Form.Label>Address Line 2</Form.Label>
               <Form.Control
                 name="addressLine2"
-                type="text"
-                placeholder="Degasaw Lane"
                 required
+                defaultValue={student.addressLine2}
               />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
-              </Form.Control.Feedback>
             </Form.Group>
           </Row>
+
           <Row className="mb-3">
             <Form.Group as={Col} md="6">
               <Form.Label>Address Line 3</Form.Label>
               <Form.Control
                 name="addressLine3"
-                type="text"
-                placeholder="Molpe"
+                defaultValue={student.addressLine3}
               />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid address.
-              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="6">
               <Form.Label>City</Form.Label>
-              <Form.Control
-                name="city"
-                type="text"
-                placeholder="Moratuwa"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid city.
-              </Form.Control.Feedback>
+              <Form.Control name="city" required defaultValue={student.city} />
             </Form.Group>
           </Row>
+
           <Row className="mb-3">
             <Form.Group as={Col} md="6">
               <Form.Label>E-mail</Form.Label>
               <Form.Control
                 name="email"
                 type="email"
-                placeholder="amal.perera@example.com"
                 required
+                defaultValue={student.email}
               />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid e-mail address.
-              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} md="6">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 name="phoneNumber"
-                type="text"
-                placeholder="0771234567"
                 required
+                defaultValue={student.phoneNumber}
               />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid phone number.
-              </Form.Control.Feedback>
             </Form.Group>
           </Row>
+
           <Row className="mb-3">
             <Form.Group as={Col} md="6">
               <Form.Label>Password</Form.Label>
@@ -175,6 +156,7 @@ function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
                 placeholder="Password"
                 minLength={6}
                 required
+                defaultValue={student.password}
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a password with at least 6 characters.
@@ -182,6 +164,7 @@ function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
             </Form.Group>
           </Row>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="danger" onClick={onHide}>
             Cancel
@@ -190,10 +173,10 @@ function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
             {saving ? (
               <>
                 <Spinner size="sm" className="me-2" />
-                Saving...
+                Updating...
               </>
             ) : (
-              "Submit"
+              "Update"
             )}
           </Button>
         </Modal.Footer>
@@ -202,4 +185,4 @@ function AddInstructor({ show, onHide, onSaved }: AddInstructorProps) {
   );
 }
 
-export default AddInstructor;
+export default UpdateStudent;

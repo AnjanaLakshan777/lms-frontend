@@ -12,12 +12,12 @@ export const SignIn = () => {
           </Card.Title>
 
           <Form>
-            <Form.Group className="mb-3 fw-bold" controlId="formBasicEmail">
+            <Form.Group className="mb-3 fw-bold">
               <Form.Label>Email address</Form.Label>
               <Form.Control type="email" placeholder="Enter email" />
             </Form.Group>
 
-            <Form.Group className="mb-3 fw-bold" controlId="formBasicPassword">
+            <Form.Group className="mb-3 fw-bold">
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" placeholder="Password" />
             </Form.Group>

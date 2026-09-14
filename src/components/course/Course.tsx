@@ -6,12 +6,15 @@ import Table from "react-bootstrap/Table";
 import { getCourses } from "../../services/courseService";
 import type { Course as CourseType } from "../../types/course";
 import AddCourse from "./AddCourse";
+import UpdateCourse from "./UpdateCourse";
 
 export const Course = () => {
   const [courses, setCourses] = useState<CourseType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddCourseForm, setShowAddCourseForm] = useState(false);
+  const [showUpdateCourseForm, setShowUpdateCourseForm] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null);
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -32,6 +35,16 @@ export const Course = () => {
   const reloadCourses = async () => {
     const response = await getCourses();
     setCourses(response.data);
+  };
+
+  const handleEditCourse = (course: CourseType) => {
+    setSelectedCourse(course);
+    setShowUpdateCourseForm(true);
+  };
+
+  const closeUpdateCourse = () => {
+    setShowUpdateCourseForm(false);
+    setSelectedCourse(null);
   };
 
   return (
@@ -81,7 +94,11 @@ export const Course = () => {
 
                   <td>
                     <div className="d-flex justify-content-center gap-2">
-                      <Button size="sm" variant="outline-primary">
+                      <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => handleEditCourse(course)}
+                      >
                         <PencilSquare className="me-1" />
                         Edit
                       </Button>
@@ -104,6 +121,14 @@ export const Course = () => {
         onHide={() => setShowAddCourseForm(false)}
         onSaved={reloadCourses}
       />
+      {selectedCourse && (
+        <UpdateCourse
+          course={selectedCourse}
+          show={showUpdateCourseForm}
+          onHide={closeUpdateCourse}
+          onUpdated={reloadCourses}
+        />
+      )}
     </Container>
   );
 };

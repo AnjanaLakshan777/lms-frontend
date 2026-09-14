@@ -6,12 +6,15 @@ import Table from "react-bootstrap/Table";
 import { getLessons } from "../../services/lessonService";
 import type { Lesson as LessonType } from "../../types/lesson";
 import AddLesson from "./AddLesson";
+import UpdateLesson from "./UpdateLesson";
 
 export const Lesson = () => {
   const [lessons, setLessons] = useState<LessonType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
+  const [showUpdateLessonForm, setShowUpdateLessonForm] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState<LessonType | null>(null);
 
   useEffect(() => {
     const loadLessons = async () => {
@@ -32,6 +35,16 @@ export const Lesson = () => {
   const reloadLessons = async () => {
     const response = await getLessons();
     setLessons(response.data);
+  };
+
+  const handleEditLesson = (lesson: LessonType) => {
+    setSelectedLesson(lesson);
+    setShowUpdateLessonForm(true);
+  };
+
+  const closeUpdateLesson = () => {
+    setShowUpdateLessonForm(false);
+    setSelectedLesson(null);
   };
 
   return (
@@ -79,7 +92,11 @@ export const Lesson = () => {
 
                   <td>
                     <div className="d-flex justify-content-center gap-2">
-                      <Button size="sm" variant="outline-primary">
+                      <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => handleEditLesson(lesson)}
+                      >
                         <PencilSquare className="me-1" />
                         Edit
                       </Button>
@@ -102,6 +119,14 @@ export const Lesson = () => {
         onHide={() => setShowAddLessonForm(false)}
         onSaved={reloadLessons}
       />
+      {selectedLesson && (
+        <UpdateLesson
+          lesson={selectedLesson}
+          show={showUpdateLessonForm}
+          onHide={closeUpdateLesson}
+          onUpdated={reloadLessons}
+        />
+      )}
     </Container>
   );
 };

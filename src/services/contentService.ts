@@ -28,3 +28,20 @@ export const saveContent = async (content: CreateContentRequest) => {
 
     return response.data;
 };
+
+export const updateContent = async (content: Content, fileData: File) => {
+    const formData = new FormData();
+    formData.append("contentCode", content.contentCode);
+    formData.append("title", content.title);
+    formData.append("type", content.type);
+    formData.append("lessonId", String(content.lessonId));
+    formData.append("fileData", fileData);
+
+    const response = await axios.put(`/contents/${content.contentId}`, formData, {
+        headers: {
+            "Content-Type": undefined,
+        },
+    });
+
+    return response.data;
+};

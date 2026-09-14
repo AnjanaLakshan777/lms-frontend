@@ -14,26 +14,26 @@ export const SignUp = () => {
           </Card.Title>
           <Form>
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationCustom01">
+              <Form.Group as={Col} md="6">
                 <Form.Label>First name</Form.Label>
                 <Form.Control required type="text" placeholder="Amal" />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationCustom02">
+              <Form.Group as={Col} md="6">
                 <Form.Label>Last name</Form.Label>
                 <Form.Control required type="text" placeholder="Perera" />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationCustom03">
+              <Form.Group as={Col} md="6">
                 <Form.Label>Address Line 1</Form.Label>
                 <Form.Control type="text" placeholder="No.23" required />
                 <Form.Control.Feedback type="invalid">
                   Please provide a valid address.
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationCustom04">
+              <Form.Group as={Col} md="6">
                 <Form.Label>Address Line 2</Form.Label>
                 <Form.Control type="text" placeholder="Degasaw Lane" required />
                 <Form.Control.Feedback type="invalid">
@@ -42,14 +42,14 @@ export const SignUp = () => {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationCustom05">
+              <Form.Group as={Col} md="6">
                 <Form.Label>Address Line 3</Form.Label>
                 <Form.Control type="text" placeholder="Molpe" />
                 <Form.Control.Feedback type="invalid">
                   Please provide a valid address.
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationCustom06">
+              <Form.Group as={Col} md="6">
                 <Form.Label>City</Form.Label>
                 <Form.Control type="text" placeholder="Moratuwa" required />
                 <Form.Control.Feedback type="invalid">
@@ -58,7 +58,7 @@ export const SignUp = () => {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationCustom07">
+              <Form.Group as={Col} md="6">
                 <Form.Label>E-mail</Form.Label>
                 <Form.Control
                   type="email"
@@ -69,7 +69,7 @@ export const SignUp = () => {
                   Please provide a valid e-mail address.
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationCustom08">
+              <Form.Group as={Col} md="6">
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control type="text" placeholder="0771234567" required />
                 <Form.Control.Feedback type="invalid">
@@ -78,7 +78,7 @@ export const SignUp = () => {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="validationCustom09">
+              <Form.Group as={Col} md="6">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                   type="password"

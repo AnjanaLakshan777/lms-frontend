@@ -14,12 +14,7 @@ export const saveModule = async (module: CreateModuleRequest) => {
 };
 
 export const updateModule = async (module: Module) => {
-    const response = await axios.put(`/modules/${module.moduleId}`, {
-        moduleCode: module.moduleCode,
-        moduleName: module.moduleName,
-        description: module.description,
-        courseId: module.courseId,
-    });
+    const response = await axios.put(`/modules/${module.moduleId}`, module);
 
     return response.data;
 };

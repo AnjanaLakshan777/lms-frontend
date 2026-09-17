@@ -25,15 +25,7 @@ export const saveInstructor = async (
 
 export const updateInstructor = async (instructor: User) => {
   const response = await axios.put(`/users/${instructor.id}`, {
-    firstName: instructor.firstName,
-    lastName: instructor.lastName,
-    addressLine1: instructor.addressLine1,
-    addressLine2: instructor.addressLine2,
-    addressLine3: instructor.addressLine3,
-    city: instructor.city,
-    email: instructor.email,
-    phoneNumber: instructor.phoneNumber,
-    password: instructor.password,
+    ...instructor,
     role: "INSTRUCTOR",
   });
 

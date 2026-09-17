@@ -14,11 +14,7 @@ export const saveLesson = async (lesson: CreateLessonRequest) => {
 };
 
 export const updateLesson = async (lesson: Lesson) => {
-    const response = await axios.put(`/lessons/${lesson.lessonId}`, {
-        lessonCode: lesson.lessonCode,
-        lessonName: lesson.lessonName,
-        moduleId: lesson.moduleId,
-    });
+    const response = await axios.put(`/lessons/${lesson.lessonId}`, lesson);
 
     return response.data;
 };

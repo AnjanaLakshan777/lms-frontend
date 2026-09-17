@@ -114,7 +114,7 @@ function UpdateCourse({ course, show, onHide, onUpdated }: UpdateCourseProps) {
               <option value="">Select an instructor</option>
               {instructors.map((instructor) => (
                 <option key={instructor.id} value={instructor.id}>
-                  {instructor.firstName} {instructor.lastName}
+                  {instructor.id} - {instructor.firstName} {instructor.lastName}
                 </option>
               ))}
             </Form.Select>

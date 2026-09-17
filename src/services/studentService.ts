@@ -23,15 +23,7 @@ export const saveStudent = async (student: CreateStudentRequest) => {
 
 export const updateStudent = async (student: User) => {
   const response = await axios.put(`/users/${student.id}`, {
-    firstName: student.firstName,
-    lastName: student.lastName,
-    addressLine1: student.addressLine1,
-    addressLine2: student.addressLine2,
-    addressLine3: student.addressLine3,
-    city: student.city,
-    email: student.email,
-    phoneNumber: student.phoneNumber,
-    password: student.password,
+    ...student,
     role: "STUDENT",
   });
 

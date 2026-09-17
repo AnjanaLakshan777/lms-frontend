@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Alert, Container, Spinner } from "react-bootstrap";
+import { Alert, Container, Modal, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
-import { getStudents } from "../../services/studentService";
+import { deleteStudent, getStudents } from "../../services/studentService";
 import type { User as UserType } from "../../types/user";
 import AddStudent from "./AddStudent";
 import UpdateStudent from "./UpdateStudent";
@@ -16,6 +16,7 @@ export const Student = () => {
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
   const [showUpdateStudentForm, setShowUpdateStudentForm] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<UserType | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     const loadStudents = async () => {
@@ -46,6 +47,28 @@ export const Student = () => {
   const handleCloseUpdateStudent = () => {
     setShowUpdateStudentForm(false);
     setSelectedStudent(null);
+  };
+
+  const handleDeleteStudent = (student: UserType) => {
+    setSelectedStudent(student);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteStudent = async () => {
+    if (!selectedStudent) {
+      return;
+    }
+
+    try {
+      setError("");
+      await deleteStudent(selectedStudent.id);
+      await reloadStudents();
+      setShowDeleteConfirmation(false);
+      setSelectedStudent(null);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete student.");
+    }
   };
 
   return (
@@ -103,7 +126,11 @@ export const Student = () => {
                         Edit
                       </Button>
 
-                      <Button size="sm" variant="outline-danger">
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => handleDeleteStudent(student)}
+                      >
                         <Trash className="me-1" />
                         Delete
                       </Button>
@@ -128,6 +155,32 @@ export const Student = () => {
           onUpdated={reloadStudents}
         />
       )}
+
+      {/* Delete student pop up screen */}
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete {selectedStudent?.firstName}{" "}
+          {selectedStudent?.lastName}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteStudent}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

@@ -18,3 +18,9 @@ export const updateCourse = async (course: Course) => {
 
   return response.data;
 };
+
+export const deleteCourse = async(course: Course) => {
+  const response = await axios.delete(`/courses/${course.courseId}`)
+
+  return response;
+}

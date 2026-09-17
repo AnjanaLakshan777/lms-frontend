@@ -31,3 +31,9 @@ export const updateInstructor = async (instructor: User) => {
 
   return response.data;
 };
+
+export const deleteInstructor = async (instuctor: User) => {
+  const response = await axios.delete(`/users/${instuctor.id}`)
+
+  return response;
+}

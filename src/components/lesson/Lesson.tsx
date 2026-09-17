@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Container, Alert, Spinner } from "react-bootstrap";
+import { Container, Alert, Modal, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { getLessons } from "../../services/lessonService";
+import { deleteLesson, getLessons } from "../../services/lessonService";
 import type { Lesson as LessonType } from "../../types/lesson";
 import AddLesson from "./AddLesson";
 import UpdateLesson from "./UpdateLesson";
@@ -15,6 +15,8 @@ export const Lesson = () => {
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [showUpdateLessonForm, setShowUpdateLessonForm] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<LessonType | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [lessonToDelete, setLessonToDelete] = useState<LessonType | null>(null);
 
   useEffect(() => {
     const loadLessons = async () => {
@@ -45,6 +47,26 @@ export const Lesson = () => {
   const closeUpdateLesson = () => {
     setShowUpdateLessonForm(false);
     setSelectedLesson(null);
+  };
+
+  const handleDeleteLesson = (lesson: LessonType) => {
+    setLessonToDelete(lesson);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteLesson = async () => {
+    if (!lessonToDelete) return;
+
+    try {
+      setError("");
+      await deleteLesson(lessonToDelete);
+      await reloadLessons();
+      setShowDeleteConfirmation(false);
+      setLessonToDelete(null);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete lesson.");
+    }
   };
 
   return (
@@ -101,7 +123,11 @@ export const Lesson = () => {
                         Edit
                       </Button>
 
-                      <Button size="sm" variant="outline-danger">
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => handleDeleteLesson(lesson)}
+                      >
                         <Trash className="me-1" />
                         Delete
                       </Button>
@@ -127,6 +153,31 @@ export const Lesson = () => {
           onUpdated={reloadLessons}
         />
       )}
+
+      {/* Delete lesson pop up screen */}
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete lesson {lessonToDelete?.lessonCode}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteLesson}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

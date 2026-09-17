@@ -111,7 +111,7 @@ function UpdateContent({
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>New File</Form.Label>
-            <Form.Control name="fileData" defaultValue={content.fileData} type="file" required />
+            <Form.Control name="fileData" type="file" required />
           </Form.Group>
           <Form.Group>
             <Form.Label>Lesson</Form.Label>

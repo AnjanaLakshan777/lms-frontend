@@ -18,3 +18,9 @@ export const updateLesson = async (lesson: Lesson) => {
 
     return response.data;
 };
+
+export const deleteLesson = async(lesson: Lesson) => {
+  const response = await axios.delete(`/lessons/${lesson.lessonId}`)
+
+  return response;
+}

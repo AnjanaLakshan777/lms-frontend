@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Container, Alert, Spinner } from "react-bootstrap";
+import { Container, Alert, Modal, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { getContents } from "../../services/contentService";
+import { deleteContent, getContents } from "../../services/contentService";
 import type { Content as ContentType } from "../../types/content";
 import AddContent from "./AddContent";
 import UpdateContent from "./UpdateContent";
@@ -15,6 +15,10 @@ export const Content = () => {
   const [showAddContentForm, setShowAddContentForm] = useState(false);
   const [showUpdateContentForm, setShowUpdateContentForm] = useState(false);
   const [selectedContent, setSelectedContent] = useState<ContentType | null>(
+    null,
+  );
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [contentToDelete, setContentToDelete] = useState<ContentType | null>(
     null,
   );
 
@@ -46,6 +50,26 @@ export const Content = () => {
   const closeUpdateContent = () => {
     setShowUpdateContentForm(false);
     setSelectedContent(null);
+  };
+
+  const handleDeleteContent = (content: ContentType) => {
+    setContentToDelete(content);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteContent = async () => {
+    if (!contentToDelete) return;
+
+    try {
+      setError("");
+      await deleteContent(contentToDelete);
+      await reloadContents();
+      setShowDeleteConfirmation(false);
+      setContentToDelete(null);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete content.");
+    }
   };
 
   return (
@@ -140,7 +164,10 @@ export const Content = () => {
                           Edit
                         </Button>
 
-                        <Button variant="outline-danger">
+                        <Button
+                          variant="outline-danger"
+                          onClick={() => handleDeleteContent(content)}
+                        >
                           <Trash className="me-2" />
                           Delete
                         </Button>
@@ -166,6 +193,32 @@ export const Content = () => {
           onUpdated={reloadContents}
         />
       )}
+
+      {/* Delete content pop up screen */}
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete content {contentToDelete?.contentCode}
+          ?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteContent}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

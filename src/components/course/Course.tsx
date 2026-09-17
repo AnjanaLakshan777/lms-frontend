@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Container, Alert, Spinner } from "react-bootstrap";
+import { Container, Alert, Modal, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { getCourses } from "../../services/courseService";
+import { deleteCourse, getCourses } from "../../services/courseService";
 import type { Course as CourseType } from "../../types/course";
 import AddCourse from "./AddCourse";
 import UpdateCourse from "./UpdateCourse";
@@ -15,6 +15,8 @@ export const Course = () => {
   const [showAddCourseForm, setShowAddCourseForm] = useState(false);
   const [showUpdateCourseForm, setShowUpdateCourseForm] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState<CourseType | null>(null);
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -45,6 +47,26 @@ export const Course = () => {
   const closeUpdateCourse = () => {
     setShowUpdateCourseForm(false);
     setSelectedCourse(null);
+  };
+
+  const handleDeleteCourse = (course: CourseType) => {
+    setCourseToDelete(course);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteCourse = async () => {
+    if (!courseToDelete) return;
+
+    try {
+      setError("");
+      await deleteCourse(courseToDelete);
+      await reloadCourses();
+      setShowDeleteConfirmation(false);
+      setCourseToDelete(null);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete course.");
+    }
   };
 
   return (
@@ -103,7 +125,11 @@ export const Course = () => {
                         Edit
                       </Button>
 
-                      <Button size="sm" variant="outline-danger">
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => handleDeleteCourse(course)}
+                      >
                         <Trash className="me-1" />
                         Delete
                       </Button>
@@ -129,6 +155,31 @@ export const Course = () => {
           onUpdated={reloadCourses}
         />
       )}
+
+      {/* Delete course pop up screen */}
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete course {courseToDelete?.courseCode}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteCourse}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

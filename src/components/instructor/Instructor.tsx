@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Alert, Container, Spinner } from "react-bootstrap";
+import { Alert, Container, Modal, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
-import { getInstructors } from "../../services/instructorService";
+import {
+  deleteInstructor,
+  getInstructors,
+} from "../../services/instructorService";
 import type { User as UserType } from "../../types/user";
 import AddInstructor from "./AddInstructor";
 import UpdateInstructor from "./UpdateInstructor";
@@ -17,6 +20,10 @@ export const Instructor = () => {
   const [showUpdateInstructorForm, setShowUpdateInstructorForm] =
     useState(false);
   const [selectedInstructor, setSelectedInstructor] = useState<UserType | null>(
+    null,
+  );
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [instructorToDelete, setInstructorToDelete] = useState<UserType | null>(
     null,
   );
 
@@ -49,6 +56,26 @@ export const Instructor = () => {
   const closeUpdateInstructor = () => {
     setShowUpdateInstructorForm(false);
     setSelectedInstructor(null);
+  };
+
+  const handleDeleteInstructor = (instructor: UserType) => {
+    setInstructorToDelete(instructor);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteInstructor = async () => {
+    if (!instructorToDelete) return;
+
+    try {
+      setError("");
+      await deleteInstructor(instructorToDelete);
+      await reloadInstructors();
+      setShowDeleteConfirmation(false);
+      setInstructorToDelete(null);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete instructor.");
+    }
   };
 
   return (
@@ -109,7 +136,11 @@ export const Instructor = () => {
                         Edit
                       </Button>
 
-                      <Button size="sm" variant="outline-danger">
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => handleDeleteInstructor(instructor)}
+                      >
                         <Trash className="me-1" />
                         Delete
                       </Button>
@@ -134,6 +165,32 @@ export const Instructor = () => {
           onUpdated={reloadInstructors}
         />
       )}
+
+      {/* Delete instructor pop up screen  */}
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete {instructorToDelete?.firstName}{" "}
+          {instructorToDelete?.lastName}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteInstructor}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

@@ -29,3 +29,9 @@ export const updateStudent = async (student: User) => {
 
   return response.data;
 };
+
+export const deleteStudent = async (studentId: User["id"]) => {
+  const response = await axios.delete(`/users/${studentId}`);
+
+  return response.data;
+};

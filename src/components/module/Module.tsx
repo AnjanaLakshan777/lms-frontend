@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Container, Alert, Spinner } from "react-bootstrap";
+import { Container, Alert, Modal, Spinner } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { getModules } from "../../services/moduleService";
+import { deleteModule, getModules } from "../../services/moduleService";
 import type { Module as ModuleType } from "../../types/module";
 import AddModule from "./AddModule";
 import UpdateModule from "./UpdateModule";
@@ -15,6 +15,8 @@ export const Module = () => {
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
   const [showUpdateModuleForm, setShowUpdateModuleForm] = useState(false);
   const [selectedModule, setSelectedModule] = useState<ModuleType | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [moduleToDelete, setModuleToDelete] = useState<ModuleType | null>(null);
 
   useEffect(() => {
     const loadModules = async () => {
@@ -45,6 +47,26 @@ export const Module = () => {
   const closeUpdateModule = () => {
     setShowUpdateModuleForm(false);
     setSelectedModule(null);
+  };
+
+  const handleDeleteModule = (module: ModuleType) => {
+    setModuleToDelete(module);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteModule = async () => {
+    if (!moduleToDelete) return;
+
+    try {
+      setError("");
+      await deleteModule(moduleToDelete);
+      await reloadModules();
+      setShowDeleteConfirmation(false);
+      setModuleToDelete(null);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete module.");
+    }
   };
 
   return (
@@ -103,7 +125,11 @@ export const Module = () => {
                         Edit
                       </Button>
 
-                      <Button size="sm" variant="outline-danger">
+                      <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => handleDeleteModule(module)}
+                      >
                         <Trash className="me-1" />
                         Delete
                       </Button>
@@ -129,6 +155,31 @@ export const Module = () => {
           onUpdated={reloadModules}
         />
       )}
+
+      {/* Delete module pop up screen */}
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete module {moduleToDelete?.moduleCode}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteModule}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

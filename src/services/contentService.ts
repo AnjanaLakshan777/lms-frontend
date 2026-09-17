@@ -45,3 +45,10 @@ export const updateContent = async (content: Content, fileData: File) => {
 
     return response.data;
 };
+
+export const deleteContent = async(content: Content) => {
+    const response = await axios.delete(`/contents/${content.contentId}`)
+
+    return response;
+}
+

@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { Alert, Container, Modal, Spinner } from "react-bootstrap";
-import { PencilSquare, Trash } from "react-bootstrap-icons";
+import { PersonPlus, PencilSquare, Trash } from "react-bootstrap-icons";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
 import { deleteStudent, getStudents } from "../../services/studentService";
+import { getCourses } from "../../services/courseService";
+import { saveEnrollment } from "../../services/enrollmentService";
 import type { User as UserType } from "../../types/user";
+import type { Course as CourseType } from "../../types/course";
 import AddStudent from "./AddStudent";
 import UpdateStudent from "./UpdateStudent";
 
@@ -14,6 +19,9 @@ export const Student = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+  const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
+  const [courses, setCourses] = useState<CourseType[]>([]);
+  const [selectedCourseId, setSelectedCourseId] = useState("");
   const [showUpdateStudentForm, setShowUpdateStudentForm] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<UserType | null>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -32,7 +40,56 @@ export const Student = () => {
     };
 
     loadStudents();
+
+    const loadCourses = async () => {
+      try {
+        const response = await getCourses();
+        setCourses(response.data);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load courses.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCourses();
   }, []);
+
+  const handleEnrollModal = (student: UserType) => {
+    setSelectedStudent(student);
+    setSelectedCourseId("");
+    setShowEnrollmentModal(true);
+  };
+
+  const handleEnrollStudent = async () => {
+    if (!selectedStudent || !selectedCourseId) {
+      setError("Please select a course.");
+      return;
+    }
+
+    const selectedCourse = courses.find(
+      (course) => String(course.courseId) === selectedCourseId,
+    );
+
+    if (!selectedCourse) {
+      setError("Selected course was not found.");
+      return;
+    }
+
+    try {
+      setError("");
+      await saveEnrollment({
+        studentId: selectedStudent.id,
+        courseId: selectedCourse.courseId,
+      });
+      setShowEnrollmentModal(false);
+      setSelectedCourseId("");
+    } catch (err) {
+      console.error(err);
+      setError("Unable to enroll student.");
+    }
+  };
 
   const reloadStudents = async () => {
     const response = await getStudents();
@@ -71,6 +128,10 @@ export const Student = () => {
     }
   };
 
+  const sortedStudents = [...students].sort(
+    (firstStudent, secondStudent) => firstStudent.id - secondStudent.id,
+  );
+
   return (
     <Container fluid className="mt-4 px-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -108,7 +169,7 @@ export const Student = () => {
                 </td>
               </tr>
             ) : (
-              students.map((student: UserType) => (
+              sortedStudents.map((student: UserType) => (
                 <tr key={student.id}>
                   <td>{student.id}</td>
                   <td>{`${student.firstName} ${student.lastName}`}</td>
@@ -117,6 +178,14 @@ export const Student = () => {
                   <td>{`${student.addressLine1}, ${student.addressLine2}, ${student.addressLine3}, ${student.city}`}</td>
                   <td>
                     <div className="d-flex justify-content-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline-success"
+                        onClick={() => handleEnrollModal(student)}
+                      >
+                        <PersonPlus className="me-1" />
+                        Enroll
+                      </Button>
                       <Button
                         size="sm"
                         variant="outline-primary"
@@ -178,6 +247,52 @@ export const Student = () => {
           </Button>
           <Button variant="danger" onClick={confirmDeleteStudent}>
             Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Course list (Enrollment) pop up screen */}
+      <Modal
+        show={showEnrollmentModal}
+        onHide={() => setShowEnrollmentModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Select a course - {selectedStudent?.firstName}{" "}
+            {selectedStudent?.lastName}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group as={Col} md="12">
+            <Form.Label>Course</Form.Label>
+            <Form.Select
+              name="courseId"
+              value={selectedCourseId}
+              onChange={(e) => setSelectedCourseId(e.target.value)}
+              required
+            >
+              <option value="">Select a course</option>
+              {courses.map((course) => (
+                <option key={course.courseId} value={course.courseId}>
+                  {course.courseCode} - {course.courseName}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Please select a course.
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="danger"
+            onClick={() => setShowEnrollmentModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="success" onClick={handleEnrollStudent}>
+            Enroll
           </Button>
         </Modal.Footer>
       </Modal>

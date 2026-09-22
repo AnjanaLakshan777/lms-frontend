@@ -1,5 +1,5 @@
 export interface Enrollment{
-    enrollmentId: number,
+    enrollId: number,
     studentId: number,
     courseId: number,
     courseName: string,

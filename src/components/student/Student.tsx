@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Alert, Container, Modal, Spinner } from "react-bootstrap";
 import { PersonPlus, PencilSquare, Trash } from "react-bootstrap-icons";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { useEffect } from "react";
 import { deleteStudent, getStudents } from "../../services/studentService";
 import { getCourses } from "../../services/courseService";
-import { saveEnrollment } from "../../services/enrollmentService";
 import type { User as UserType } from "../../types/user";
 import type { Course as CourseType } from "../../types/course";
 import AddStudent from "./AddStudent";
+import EnrollmentModal from "./EnrollmentModal";
 import UpdateStudent from "./UpdateStudent";
 
 export const Student = () => {
@@ -21,7 +19,6 @@ export const Student = () => {
   const [showAddStudentForm, setShowAddStudentForm] = useState(false);
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
   const [courses, setCourses] = useState<CourseType[]>([]);
-  const [selectedCourseId, setSelectedCourseId] = useState("");
   const [showUpdateStudentForm, setShowUpdateStudentForm] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<UserType | null>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -58,37 +55,7 @@ export const Student = () => {
 
   const handleEnrollModal = (student: UserType) => {
     setSelectedStudent(student);
-    setSelectedCourseId("");
     setShowEnrollmentModal(true);
-  };
-
-  const handleEnrollStudent = async () => {
-    if (!selectedStudent || !selectedCourseId) {
-      setError("Please select a course.");
-      return;
-    }
-
-    const selectedCourse = courses.find(
-      (course) => String(course.courseId) === selectedCourseId,
-    );
-
-    if (!selectedCourse) {
-      setError("Selected course was not found.");
-      return;
-    }
-
-    try {
-      setError("");
-      await saveEnrollment({
-        studentId: selectedStudent.id,
-        courseId: selectedCourse.courseId,
-      });
-      setShowEnrollmentModal(false);
-      setSelectedCourseId("");
-    } catch (err) {
-      console.error(err);
-      setError("Unable to enroll student.");
-    }
   };
 
   const reloadStudents = async () => {
@@ -251,51 +218,12 @@ export const Student = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Course list (Enrollment) pop up screen */}
-      <Modal
+      <EnrollmentModal
         show={showEnrollmentModal}
+        student={selectedStudent}
+        courses={courses}
         onHide={() => setShowEnrollmentModal(false)}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Select a course - {selectedStudent?.firstName}{" "}
-            {selectedStudent?.lastName}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group as={Col} md="12">
-            <Form.Label>Course</Form.Label>
-            <Form.Select
-              name="courseId"
-              value={selectedCourseId}
-              onChange={(e) => setSelectedCourseId(e.target.value)}
-              required
-            >
-              <option value="">Select a course</option>
-              {courses.map((course) => (
-                <option key={course.courseId} value={course.courseId}>
-                  {course.courseCode} - {course.courseName}
-                </option>
-              ))}
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              Please select a course.
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="danger"
-            onClick={() => setShowEnrollmentModal(false)}
-          >
-            Cancel
-          </Button>
-          <Button variant="success" onClick={handleEnrollStudent}>
-            Enroll
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      />
     </Container>
   );
 };

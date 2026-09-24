@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { NavBar } from "./components/Navbar/NavBar";
-import {Home} from "./components/Home";
+import Home from "./components/Home";
 import {SignIn} from "./components/auth/SignIn";
 import {SignUp} from "./components/auth/SignUp";
 import { Student } from "./components/student/Student";

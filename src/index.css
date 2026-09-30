@@ -64,3 +64,108 @@
   background-color: #084298;
   color: white !important;
 }
+
+.assigned-course-card {
+  overflow: hidden;
+  border-color: #dee2e6;
+}
+
+.assigned-course-art {
+  min-height: 160px;
+  display: flex;
+  align-items: flex-start;
+  padding: 0.75rem;
+  background-color: #6556d9;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(255, 255, 255, 0.08) 22px 26px),
+    repeating-linear-gradient(90deg, transparent 0 22px, rgba(255, 255, 255, 0.08) 22px 26px);
+}
+
+.assigned-course-code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.5rem;
+  background-color: #1d0e89;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.assigned-course-card[role="button"] {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.assigned-course-card[role="button"]:hover,
+.assigned-course-card[role="button"]:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+}
+
+.assigned-module-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.assigned-module {
+  overflow: hidden;
+  border: 1px solid #d9dfe7;
+  border-radius: 1rem;
+  background-color: #fff;
+}
+
+.assigned-module-toggle {
+  display: flex;
+  width: 100%;
+  min-height: 68px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border: 0;
+  background: transparent;
+  color: #171717;
+  text-align: left;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.assigned-module-toggle:hover {
+  background-color: #f8f8fc;
+}
+
+.assigned-module-toggle:focus-visible {
+  outline: 3px solid rgba(59, 42, 190, 0.35);
+  outline-offset: -3px;
+}
+
+.assigned-module-chevron {
+  display: grid;
+  width: 36px;
+  height: 36px; 
+  flex: 0 0 36px;
+  place-items: center;
+  border-radius: 50%;
+  background-color: #ecebfa;
+  color: #2513b8;
+}
+
+.assigned-module-details {
+  padding: 0 1rem 1rem 4.5rem;
+  color: #50545a;
+}
+
+.assigned-module-details p {
+  margin: 0.35rem 0 0;
+}
+
+.assigned-module-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.assigned-module-header .assigned-module-toggle {
+  width: auto;
+  flex: 1;
+}

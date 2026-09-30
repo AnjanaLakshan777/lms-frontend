@@ -22,16 +22,17 @@ export const SignIn = () => {
 
     try {
       const response = await api.post("/auth/login", form);
-      const { token, role } = response.data;
+      const { token, role, email } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("email", email);
       window.dispatchEvent(new Event("authStateChanged"));
 
       if (role === "ADMIN") {
         navigate("/students");
       } else if (role === "INSTRUCTOR") {
-        navigate("/instructors");
+        navigate("/assignedCourses");
       } else {
         navigate("/courses");
       }

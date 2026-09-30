@@ -14,9 +14,15 @@ type AddContentProps = {
   show: boolean;
   onHide: () => void;
   onSaved: () => void;
+  defaultLessonId?: number;
 };
 
-function AddContent({ show, onHide, onSaved }: AddContentProps) {
+function AddContent({
+  show,
+  onHide,
+  onSaved,
+  defaultLessonId,
+}: AddContentProps) {
   const [validated, setValidated] = useState(false);
   const [lessons, setLessons] = useState<LessonType[]>([]);
   const [selectedLessonId, setSelectedLessonId] = useState("");
@@ -34,9 +40,10 @@ function AddContent({ show, onHide, onSaved }: AddContentProps) {
     };
 
     if (show) {
+      setSelectedLessonId(defaultLessonId ? String(defaultLessonId) : "");
       loadLessons();
     }
-  }, [show]);
+  }, [show, defaultLessonId]);
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();

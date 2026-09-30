@@ -46,11 +46,13 @@ export const NavBar = () => {
     <>
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Navbar.Brand as={NavLink} to="/">
-            Home
-          </Navbar.Brand>
+          {localStorage.getItem("role") !== "INSTRUCTOR" && (
+            <Navbar.Brand as={NavLink} to="/">
+              Home
+            </Navbar.Brand>
+          )}
 
-          {isLoggedIn && (
+          {isLoggedIn && localStorage.getItem("role") !== "INSTRUCTOR" && (
             <Nav className="me-auto">
               <Nav.Link
                 as={NavLink}

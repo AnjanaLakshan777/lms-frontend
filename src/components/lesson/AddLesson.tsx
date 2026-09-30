@@ -14,9 +14,10 @@ type AddLessonProps = {
   show: boolean;
   onHide: () => void;
   onSaved: () => void;
+  defaultModuleId?: number;
 };
 
-function AddLesson({ show, onHide, onSaved }: AddLessonProps) {
+function AddLesson({ show, onHide, onSaved, defaultModuleId }: AddLessonProps) {
   const [validated, setValidated] = useState(false);
   const [modules, setModules] = useState<ModuleType[]>([]);
   const [selectedModuleId, setSelectedModuleId] = useState("");
@@ -34,9 +35,10 @@ function AddLesson({ show, onHide, onSaved }: AddLessonProps) {
     };
 
     if (show) {
+      setSelectedModuleId(defaultModuleId ? String(defaultModuleId) : "");
       loadModules();
     }
-  }, [show]);
+  }, [show, defaultModuleId]);
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();

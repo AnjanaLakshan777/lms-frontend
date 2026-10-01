@@ -65,12 +65,12 @@
   color: white !important;
 }
 
-.assigned-course-card {
+.assigned-course-card, .enrolled-course-card {
   overflow: hidden;
   border-color: #dee2e6;
 }
 
-.assigned-course-art {
+.assigned-course-art, .enrolled-course-art {
   min-height: 160px;
   display: flex;
   align-items: flex-start;
@@ -81,7 +81,7 @@
     repeating-linear-gradient(90deg, transparent 0 22px, rgba(255, 255, 255, 0.08) 22px 26px);
 }
 
-.assigned-course-code {
+.assigned-course-code, .enrolled-course-code {
   max-width: 100%;
   overflow-wrap: anywhere;
   padding: 0.35rem 0.55rem;
@@ -92,13 +92,15 @@
   font-weight: 600;
 }
 
-.assigned-course-card[role="button"] {
+.assigned-course-card, .enrolled-course-card {
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .assigned-course-card[role="button"]:hover,
-.assigned-course-card[role="button"]:focus-visible {
+.assigned-course-card[role="button"]:focus-visible,
+.enrolled-course-card[role="button"]:hover,
+.enrolled-course-card[role="button"]:focus-visible {
   transform: translateY(-2px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
 }

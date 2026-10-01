@@ -212,7 +212,7 @@ export const AssignedCourseModules = () => {
                   <div className="assigned-module-details">
                     {module.description && <p>{module.description}</p>}
                     <div className="d-flex align-items-center justify-content-between mt-3 mb-2">
-                      <h3 className="fs-6 mb-0">Lessons</h3>
+                      <h3 className="fs-6 mb-0 mt-2">Lessons</h3>
                       <Button
                         size="sm"
                         onClick={() => {

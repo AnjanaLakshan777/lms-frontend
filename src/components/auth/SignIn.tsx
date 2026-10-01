@@ -34,7 +34,7 @@ export const SignIn = () => {
       } else if (role === "INSTRUCTOR") {
         navigate("/assignedCourses");
       } else {
-        navigate("/courses");
+        navigate("/enrolledCourses");
       }
     } catch (error) {
       alert("Invalid email or password");

@@ -12,6 +12,9 @@ import { Content } from "./components/content/Content";
 import { AssignedCourse } from "./components/instructor/AssignedCourses";
 import { AssignedCourseModules } from "./components/instructor/AssignedCourseModules";
 import { AssignedLessonContents } from "./components/instructor/AssignedLessonContents";
+import { EnrolledCourses } from "./components/student/EnrolledCourses";
+import { EnrolledCourseModule } from "./components/student/EnrolledCourseModule";
+import { EnrolledLessonContents } from "./components/student/EnrolledLessonContents";
 
 function App() {
   return (
@@ -36,6 +39,15 @@ function App() {
           <Route
             path="/assignedCourses/lessons/:lessonId/contents"
             element={<AssignedLessonContents />}
+          />
+          <Route path="/enrolledCourses" element={<EnrolledCourses />} />
+          <Route
+            path="/enrolledCourses/:courseId/modules"
+            element={<EnrolledCourseModule />}
+          />
+          <Route
+            path="/enrolledCourses/lessons/:lessonId/contents"
+            element={<EnrolledLessonContents />}
           />
         </Routes>
       </BrowserRouter>
